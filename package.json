@@ -11,5 +11,8 @@
     "url": "github.com/rdborrell/discordCounter"
   },
   "author": "Ryan Borrell",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^13.3.1"
+  }
 }

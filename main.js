@@ -27,6 +27,6 @@ client.on('message', message =>{
 });
 
 //log in to bot
-client.login('OTA4NzY2MDQwNDk2OTQzMTI0.YY6gVA.8sFeta4s5WMnloD2eHO6m8HKpxA');
+client.login('');
 
 

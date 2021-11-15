@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const testSchema = require('./test-schema');
 //initialize Discord
 const Discord = require('discord.js');
 const {Client, Intents} = require('discord.js');
@@ -24,6 +23,14 @@ client.once('ready', async () =>
 })
 });
 
+const UserSchema = new mongoose.Schema({
+    username: mongoose.SchemaType.String,
+    discordId: {type: mongoose.SchemaType.String, required: true,},
+    currentStreak: Number
+});
+
+module.exports = mongoose.model('Users', UserSchema);
+
 client.on('message', message =>{
     
     if(!message.content.startsWith(prefix) || message.author.bot) return;
@@ -37,9 +44,20 @@ client.on('message', message =>{
     {
         message.channel.send(greetings[Math.floor(Math.random()*greetings.length)])
     }
+    else if(command === 'addMe')
+    {
+        const newUser = User.create({
+            username: message.author,
+            discordId: message.author.id,
+            currentStreak: 0
+        })
+        const savedUser = newUser.save();
+        
+        message.channel.send(message.author +" has been added to ViceBot!");
+    }
 });
 
 //log in to bot
-client.login('OTA4NzY2MDQwNDk2OTQzMTI0.YY6gVA.raRPEtd-9en1vshMpIWp049lqng');
+client.login(TOKEN);
 
 

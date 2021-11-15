@@ -8,7 +8,8 @@ const {Client, Intents} = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 //create Bot
 
-const Users = require("./schemas/UserSchema")
+const Users = require("./schemas/UserSchema");
+const { db } = require('./schemas/UserSchema');
 
 const prefix = '!';
 
@@ -41,15 +42,29 @@ client.on('message', message =>{
             message.channel.send(greetings[Math.floor(Math.random()*greetings.length)])
         break;
         case 'addme':
-            const newUser = Users.create({
-                username: message.author.username,
-                discordId: message.author.id,
-                currentStreak: Date.now()
-            })
-            message.channel.send(message.author.username +" has been added to ViceBot!");
+            if(!db.collection("users").find({discordId: message.author.id}).toArray())
+            {
+                const newUser = Users.create({
+                    username: message.author.username,
+                    discordId: message.author.id,
+                    vice: " ",
+                    currentStreak: Date.now()
+                })
+                message.channel.send(message.author.username +" has been added to ViceBot!");
+            }else{
+                message.channel.send(message.author.username +" has already been added to ViceBot!");
+            }
         break;
         case 'givemonkey':
             message.channel.send("https://www.placemonkeys.com/500/350?random=" + Math.floor(Math.random()*5000));
+            break;
+        case 'setvice':
+            Users.findOneAndUpdate({discordId: message.author.id}, {vice: args});
+            message.channel.send("Vice update to: " + args);
+            break;
+        case 'setstreak':
+            break;
+        case 'failed':
             break;
     }
 });

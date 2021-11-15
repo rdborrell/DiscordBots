@@ -35,17 +35,22 @@ client.on('message', message =>{
 
     let greetings = ['Hello', 'Hey', 'Привет', 'Dzień dobry']
 
-    if(command === 'hello' || command === 'hi' || command === 'hey')
+    switch(command)
     {
-        message.channel.send(greetings[Math.floor(Math.random()*greetings.length)])
-
-        const newUser = Users.create({
-            username: message.author.username,
-            discordId: message.author.id,
-            currentStreak: 0
-        })
-        
-        message.channel.send(message.author.username +" has been added to ViceBot!");
+        case 'hey' || 'hi' || 'hello':
+            message.channel.send(greetings[Math.floor(Math.random()*greetings.length)])
+        break;
+        case 'addme':
+            const newUser = Users.create({
+                username: message.author.username,
+                discordId: message.author.id,
+                currentStreak: Date.now()
+            })
+            message.channel.send(message.author.username +" has been added to ViceBot!");
+        break;
+        case 'givemonkey':
+            message.channel.send("https://www.placemonkeys.com/500/350?random=" + Math.floor(Math.random()*5000));
+            break;
     }
 });
 

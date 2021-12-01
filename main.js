@@ -1,16 +1,18 @@
-// Mongo import
 const mongoose = require('mongoose');
+
 require('dotenv').config();
+
 //initialize Discord
 const Discord = require('discord.js');
 const {Client, Intents} = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-//setting up DB Schema for Discord users
+//create Bot
+
 const Users = require("./schemas/UserSchema");
 const { db } = require('./schemas/UserSchema');
-//Command prefix
+
 const prefix = '!';
-//Database connection
+
 client.once('ready', async () =>
 {
     console.log('Vicebot is online.')
@@ -24,8 +26,7 @@ client.once('ready', async () =>
     }).catch((err) =>{console.log(err);
 })
 });
-// Client command detection/execution
-// TODO export commands to seperate files (may have more verbose commands in the future)
+
 client.on('message', async message =>{
     
     if(!message.content.startsWith(prefix) || message.author.bot) return;

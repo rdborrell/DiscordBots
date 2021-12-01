@@ -1,18 +1,16 @@
+// Mongo import
 const mongoose = require('mongoose');
-
 require('dotenv').config();
-
 //initialize Discord
 const Discord = require('discord.js');
 const {Client, Intents} = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
-//create Bot
-
+//setting up DB Schema for Discord users
 const Users = require("./schemas/UserSchema");
 const { db } = require('./schemas/UserSchema');
-
+//Command prefix
 const prefix = '!';
-
+//Database connection
 client.once('ready', async () =>
 {
     console.log('Vicebot is online.')
@@ -26,7 +24,8 @@ client.once('ready', async () =>
     }).catch((err) =>{console.log(err);
 })
 });
-
+// Client command detection/execution
+// TODO export commands to seperate files (may have more verbose commands in the future)
 client.on('message', async message =>{
     
     if(!message.content.startsWith(prefix) || message.author.bot) return;
@@ -42,22 +41,11 @@ client.on('message', async message =>{
             message.channel.send(greetings[Math.floor(Math.random()*greetings.length)])
         break;
         case 'addme':
-            if(user == null)
-            {
-                const newUser = Users.create({
-                    username: message.author.username,
-                    discordId: message.author.id,
-                    vice: " ",
-                    currentStreak: Date.now()
-                })
-                message.channel.send(message.author.username +" has been added to ViceBot!");
-            }else{
-                message.channel.send(message.author.username +" has already been added to ViceBot!");
-            }
+            addMe(user);
         break;
         case 'givemonkey':
         case 'gibmonki':
-            message.channel.send("https://www.placemonkeys.com/500/350?random=" + Math.floor(Math.random()*5000));
+            giveMonkey();
             break;
         case 'setvice':
             db.collection('users').updateOne({discordId: message.author.id}, {$set: {vice: args}}, {upsert: true});
